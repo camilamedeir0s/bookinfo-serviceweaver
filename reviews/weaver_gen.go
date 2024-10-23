@@ -307,9 +307,9 @@ var _ codegen.AutoMarshal = (*Review)(nil)
 
 type __is_Review[T ~struct {
 	weaver.AutoMarshal
-	Reviewer string  "json:\"reviewer\""
-	Text     string  "json:\"text\""
-	Rating   *Rating "json:\"rating,omitempty\""
+	Reviewer string "json:\"reviewer\""
+	Text     string "json:\"text\""
+	Rating   Rating "json:\"rating,omitempty\""
 }] struct{}
 
 var _ __is_Review[Review]
@@ -320,7 +320,7 @@ func (x *Review) WeaverMarshal(enc *codegen.Encoder) {
 	}
 	enc.String(x.Reviewer)
 	enc.String(x.Text)
-	serviceweaver_enc_ptr_Rating_f2ae2685(enc, x.Rating)
+	(x.Rating).WeaverMarshal(enc)
 }
 
 func (x *Review) WeaverUnmarshal(dec *codegen.Decoder) {
@@ -329,23 +329,5 @@ func (x *Review) WeaverUnmarshal(dec *codegen.Decoder) {
 	}
 	x.Reviewer = dec.String()
 	x.Text = dec.String()
-	x.Rating = serviceweaver_dec_ptr_Rating_f2ae2685(dec)
-}
-
-func serviceweaver_enc_ptr_Rating_f2ae2685(enc *codegen.Encoder, arg *Rating) {
-	if arg == nil {
-		enc.Bool(false)
-	} else {
-		enc.Bool(true)
-		(*arg).WeaverMarshal(enc)
-	}
-}
-
-func serviceweaver_dec_ptr_Rating_f2ae2685(dec *codegen.Decoder) *Rating {
-	if !dec.Bool() {
-		return nil
-	}
-	var res Rating
-	(&res).WeaverUnmarshal(dec)
-	return &res
+	(&x.Rating).WeaverUnmarshal(dec)
 }

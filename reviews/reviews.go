@@ -12,9 +12,9 @@ import (
 
 type Review struct {
 	weaver.AutoMarshal
-	Reviewer string  `json:"reviewer"`
-	Text     string  `json:"text"`
-	Rating   *Rating `json:"rating,omitempty"`
+	Reviewer string `json:"reviewer"`
+	Text     string `json:"text"`
+	Rating   Rating `json:"rating,omitempty"`
 }
 
 type Rating struct {
@@ -107,15 +107,15 @@ func (r *reviews) getJsonResponse(productId string, starsReviewer1, starsReviewe
 	// Verifica se as avaliações estão habilitadas e define os ratings
 	if ratingsEnabled {
 		if starsReviewer1 != -1 {
-			reviews[0].Rating = &Rating{Stars: starsReviewer1, Color: starColor}
+			reviews[0].Rating = Rating{Stars: starsReviewer1, Color: starColor}
 		} else {
-			reviews[0].Rating = &Rating{Stars: -1, Color: "Ratings service is unavailable"}
+			reviews[0].Rating = Rating{Stars: -1, Color: "Ratings service is unavailable"}
 		}
 
 		if starsReviewer2 != -1 {
-			reviews[1].Rating = &Rating{Stars: starsReviewer2, Color: starColor}
+			reviews[1].Rating = Rating{Stars: starsReviewer2, Color: starColor}
 		} else {
-			reviews[1].Rating = &Rating{Stars: -1, Color: "Ratings service is unavailable"}
+			reviews[1].Rating = Rating{Stars: -1, Color: "Ratings service is unavailable"}
 		}
 	}
 
