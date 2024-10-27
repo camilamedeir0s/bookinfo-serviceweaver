@@ -62,6 +62,7 @@ func Serve(ctx context.Context, s *Server) error {
 	r.HandleFunc("/productpage", s.productPageHandler)
 	r.HandleFunc("/api/v1/products", s.productsHandler)
 	r.HandleFunc("/api/v1/products/{id}", s.productHandler)
+	r.HandleFunc("/api/v1/products/{id}/reviews", s.productReviewsHandler)
 	r.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(staticHTML))))
 
 	// Set handler and log initialization.
@@ -272,6 +273,39 @@ func (s *Server) productHandler(w http.ResponseWriter, r *http.Request) {
 	response, err := json.Marshal(details)
 	if err != nil {
 		http.Error(w, "Failed to marshal product details", http.StatusInternalServerError)
+		return
+	}
+
+	// Envia a resposta JSON ao cliente
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(response)
+}
+
+func (s *Server) productReviewsHandler(w http.ResponseWriter, r *http.Request) {
+	// Extrai o `id` do produto da URL usando `r.URL.Path`
+	pathParts := strings.Split(r.URL.Path, "/")
+
+	// Verifica se a URL tem pelo menos 5 partes para corresponder ao formato `/api/v1/products/{id}/reviews`
+	if len(pathParts) < 5 {
+		http.Error(w, "Invalid product URL", http.StatusBadRequest)
+		return
+	}
+
+	// O `productID` está na quinta parte da URL (índice 4)
+	productID := pathParts[4]
+
+	// Chamada direta ao método `BookReviewsByID` do componente `reviews`
+	reviewsResponse, err := s.reviews.Get().BookReviewsByID(r.Context(), productID)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to get book reviews: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Serializa `reviewsResponse` para JSON
+	response, err := json.Marshal(reviewsResponse)
+	if err != nil {
+		http.Error(w, "Failed to marshal product reviews", http.StatusInternalServerError)
 		return
 	}
 
