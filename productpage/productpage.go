@@ -1,12 +1,16 @@
 package productpage
 
 import (
+	"bytes"
 	"context"
 	"embed"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io/fs"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/ServiceWeaver/weaver"
 	"github.com/camilamedeir0s/bookinfo-serviceweaver/details"
@@ -56,6 +60,8 @@ func Serve(ctx context.Context, s *Server) error {
 	r := http.NewServeMux()
 	r.Handle("/", http.HandlerFunc(s.indexHandler))
 	r.HandleFunc("/productpage", s.productPageHandler)
+	r.HandleFunc("/api/v1/products", s.productsHandler)
+	r.HandleFunc("/api/v1/products/{id}", s.productHandler)
 	r.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(staticHTML))))
 
 	// Set handler and log initialization.
@@ -93,28 +99,29 @@ func (s *Server) indexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// productPageHandler serves the product page with product details and reviews.
 func (s *Server) productPageHandler(w http.ResponseWriter, r *http.Request) {
-	productID := 1 // Usando um ID de produto padrão
+	productID := 1 // ID de produto padrão
 
-	// Chamando o serviço de detalhes para obter o BookDetails
+	// Obtendo os detalhes do livro
 	bookDetails, err := s.details.Get().GetBookDetails(context.Background(), productID, nil)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to get book details: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	// Garantindo que bookDetails é do tipo concreto BookDetails
-	// Aqui não precisamos de conversão, já que GetBookDetails retorna BookDetails diretamente
+	fmt.Println(bookDetails)
 
-	// Chamando o serviço de avaliações
+	// Obtendo as avaliações do livro
 	reviewsResponse, err := s.reviews.Get().BookReviewsByID(context.Background(), fmt.Sprintf("%d", productID))
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to get book reviews: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	// Obtendo o produto de exemplo
+	// Processa as avaliações e cria StarsSlice e EmptyStarsSlice
+	processedReviews := processReviewsWithStarsSlice(reviewsResponse.Reviews)
+
+	// Obtenção de produto exemplo
 	products := getProducts()
 	product := products[0]
 
@@ -123,9 +130,9 @@ func (s *Server) productPageHandler(w http.ResponseWriter, r *http.Request) {
 		"detailsStatus": http.StatusOK,
 		"reviewsStatus": http.StatusOK,
 		"product":       product,
-		"details":       bookDetails, // Passando o BookDetails diretamente ao template
-		"reviews":       reviewsResponse.Reviews,
-		"user":          "", // Usuário não implementado
+		"details":       bookDetails,
+		"reviews":       processedReviews, // Reviews processados
+		"user":          "",               // Usuário não implementado
 		"rating": map[string]interface{}{
 			"stars": makeSeq(4), // Exemplo de valor de rating
 			"color": "yellow",
@@ -187,4 +194,89 @@ func getProducts() []Product {
 			DescriptionHtml: "<a href=\"https://en.wikipedia.org/wiki/The_Comedy_of_Errors\">Wikipedia Summary</a>: The Comedy of Errors is one of <b>William Shakespeare's</b> early plays. It is his shortest and one of his most farcical comedies, with a major part of the humour coming from slapstick and mistaken identity, in addition to puns and word play.",
 		},
 	}
+}
+
+func processReviewsWithStarsSlice(reviews []reviews.Review) []map[string]interface{} {
+	var processedReviews []map[string]interface{}
+
+	for _, review := range reviews {
+		stars := review.Rating.Stars
+
+		// Criando slices de estrelas cheias e vazias
+		starsSlice := make([]int, stars)
+		emptyStarsSlice := make([]int, 5-stars) // Assume-se que a escala é de 5 estrelas
+
+		// Cria um mapa para passar ao template
+		reviewMap := map[string]interface{}{
+			"Reviewer":        review.Reviewer,
+			"Text":            review.Text,
+			"Rating":          review.Rating,
+			"StarsSlice":      starsSlice,
+			"EmptyStarsSlice": emptyStarsSlice,
+			"Color":           review.Rating.Color,
+		}
+
+		processedReviews = append(processedReviews, reviewMap)
+	}
+
+	return processedReviews
+}
+
+func (s *Server) productsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	products := getProducts()
+
+	var buf bytes.Buffer
+	enc := json.NewEncoder(&buf)
+	enc.SetEscapeHTML(false)
+
+	err := enc.Encode(products)
+	if err != nil {
+		http.Error(w, "Error encoding JSON", http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(buf.Bytes())
+}
+
+func (s *Server) productHandler(w http.ResponseWriter, r *http.Request) {
+	// Extrai o `id` do produto da URL usando `r.URL.Path`
+	pathParts := strings.Split(r.URL.Path, "/")
+
+	// Verifica se a URL tem pelo menos 5 partes para corresponder ao formato `/api/v1/products/{id}`
+	if len(pathParts) < 5 {
+		http.Error(w, "Invalid product URL", http.StatusBadRequest)
+		return
+	}
+
+	// O `productID` está na quinta parte da URL (índice 4)
+	productID := pathParts[4]
+
+	// Converte o productID para um número inteiro
+	id, err := strconv.Atoi(productID)
+	if err != nil {
+		http.Error(w, "Invalid product ID", http.StatusBadRequest)
+		return
+	}
+
+	// Chamada direta ao método `GetBookDetails` do componente `details`
+	details, err := s.details.Get().GetBookDetails(r.Context(), id, nil)
+	if err != nil {
+		http.Error(w, "Failed to fetch product details", http.StatusInternalServerError)
+		return
+	}
+
+	// Serializa `details` para JSON
+	response, err := json.Marshal(details)
+	if err != nil {
+		http.Error(w, "Failed to marshal product details", http.StatusInternalServerError)
+		return
+	}
+
+	// Envia a resposta JSON ao cliente
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(response)
 }
