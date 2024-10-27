@@ -14,6 +14,7 @@ import (
 
 	"github.com/ServiceWeaver/weaver"
 	"github.com/camilamedeir0s/bookinfo-serviceweaver/details"
+	"github.com/camilamedeir0s/bookinfo-serviceweaver/ratings"
 	"github.com/camilamedeir0s/bookinfo-serviceweaver/reviews"
 )
 
@@ -26,6 +27,7 @@ type Server struct {
 	productpage weaver.Listener
 	details     weaver.Ref[details.Details]
 	reviews     weaver.Ref[reviews.Reviews]
+	ratings     weaver.Ref[ratings.Ratings]
 	templates   *template.Template
 }
 
@@ -63,6 +65,7 @@ func Serve(ctx context.Context, s *Server) error {
 	r.HandleFunc("/api/v1/products", s.productsHandler)
 	r.HandleFunc("/api/v1/products/{id}", s.productHandler)
 	r.HandleFunc("/api/v1/products/{id}/reviews", s.productReviewsHandler)
+	r.HandleFunc("/api/v1/products/{id}/ratings", s.productRatingsHandler)
 	r.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(staticHTML))))
 
 	// Set handler and log initialization.
@@ -306,6 +309,46 @@ func (s *Server) productReviewsHandler(w http.ResponseWriter, r *http.Request) {
 	response, err := json.Marshal(reviewsResponse)
 	if err != nil {
 		http.Error(w, "Failed to marshal product reviews", http.StatusInternalServerError)
+		return
+	}
+
+	// Envia a resposta JSON ao cliente
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(response)
+}
+
+func (s *Server) productRatingsHandler(w http.ResponseWriter, r *http.Request) {
+	// Extrai o `id` do produto da URL usando `r.URL.Path`
+	pathParts := strings.Split(r.URL.Path, "/")
+
+	// Verifica se a URL tem pelo menos 5 partes para corresponder ao formato `/api/v1/products/{id}/ratings`
+	if len(pathParts) < 5 {
+		http.Error(w, "Invalid product URL", http.StatusBadRequest)
+		return
+	}
+
+	// O `productID` está na quinta parte da URL (índice 4)
+	productID := pathParts[4]
+
+	// Converte o `productID` para um número inteiro
+	id, err := strconv.Atoi(productID)
+	if err != nil {
+		http.Error(w, "Invalid product ID", http.StatusBadRequest)
+		return
+	}
+
+	// Chamada direta ao método `GetRatings` do componente `ratings`
+	ratingsResponse, err := s.ratings.Get().GetRatings(r.Context(), id)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to get product ratings: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Serializa `ratingsResponse` para JSON
+	response, err := json.Marshal(ratingsResponse)
+	if err != nil {
+		http.Error(w, "Failed to marshal product ratings", http.StatusInternalServerError)
 		return
 	}
 
