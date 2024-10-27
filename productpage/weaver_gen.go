@@ -27,7 +27,7 @@ func init() {
 		ReflectStubFn: func(caller func(string, context.Context, []any, []any) error) any {
 			return main_reflect_stub{caller: caller}
 		},
-		RefData: "⟦d8b12067:wEaVeReDgE:github.com/ServiceWeaver/weaver/Main→github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details⟧\n⟦8404e27b:wEaVeReDgE:github.com/ServiceWeaver/weaver/Main→github.com/camilamedeir0s/bookinfo-serviceweaver/reviews/Reviews⟧\n⟦3f83a94b:wEaVeRlIsTeNeRs:github.com/ServiceWeaver/weaver/Main→productpage⟧\n",
+		RefData: "⟦d8b12067:wEaVeReDgE:github.com/ServiceWeaver/weaver/Main→github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details⟧\n⟦8404e27b:wEaVeReDgE:github.com/ServiceWeaver/weaver/Main→github.com/camilamedeir0s/bookinfo-serviceweaver/reviews/Reviews⟧\n⟦685fa2bc:wEaVeReDgE:github.com/ServiceWeaver/weaver/Main→github.com/camilamedeir0s/bookinfo-serviceweaver/ratings/Ratings⟧\n⟦3f83a94b:wEaVeRlIsTeNeRs:github.com/ServiceWeaver/weaver/Main→productpage⟧\n",
 	})
 }
 
