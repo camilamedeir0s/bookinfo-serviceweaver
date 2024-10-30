@@ -7,5 +7,5 @@ rollout = "5m"
 # [single]
 # listeners.productpage = {address = "localhost:12345"}
 
-# [multi]
-# listeners.productpage = {address = "localhost:12345"}
+[multi]
+listeners.productpage = {address = "localhost:12345"}
