@@ -61,6 +61,7 @@ func Serve(ctx context.Context, s *Server) error {
 	// Set up routing
 	r := http.NewServeMux()
 	r.Handle("/", http.HandlerFunc(s.indexHandler))
+	r.HandleFunc("/health", s.healthHandler)
 	r.HandleFunc("/productpage", s.productPageHandler)
 	r.HandleFunc("/api/v1/products", s.productsHandler)
 	r.HandleFunc("/api/v1/products/{id}", s.productHandler)
@@ -356,4 +357,8 @@ func (s *Server) productRatingsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(response)
+}
+
+func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "Product page is healthy")
 }
