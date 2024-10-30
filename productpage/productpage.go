@@ -18,7 +18,7 @@ import (
 	"github.com/camilamedeir0s/bookinfo-serviceweaver/reviews"
 )
 
-//go:embed templates/*
+//go:embed static/* templates/*
 var embeddedFiles embed.FS
 
 type Server struct {
