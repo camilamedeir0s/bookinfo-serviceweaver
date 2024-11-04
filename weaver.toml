@@ -2,10 +2,8 @@
 binary = "./bookinfo-serviceweaver"
 rollout = "5m"
 
-# env = ["ENABLE_EXTERNAL_BOOK_SERVICE=true"]
-
-# [single]
-# listeners.productpage = {address = "localhost:12345"}
+[single]
+listeners.productpage = {address = "localhost:12345"}
 
 [multi]
 listeners.productpage = {address = "localhost:12345"}
