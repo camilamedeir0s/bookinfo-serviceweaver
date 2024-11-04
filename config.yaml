@@ -1,0 +1,7 @@
+appConfig: weaver.toml
+repo: docker.io/camilamedeir0s
+
+listeners:
+  - name: productpage
+    public: true
+    
