@@ -102,20 +102,56 @@ func (r *reviews) getJsonResponse(productId string, starsReviewer1, starsReviewe
 			Reviewer: "Reviewer2",
 			Text:     "Absolutely fun and entertaining. The play lacks thematic depth when compared to other plays by Shakespeare.",
 		},
+		{
+			Reviewer: "Reviewer3",
+			Text:     "A thought-provoking play with complex characters and captivating dialogues.",
+		},
+		{
+			Reviewer: "Reviewer4",
+			Text:     "Engaging storyline but falls short on character development.",
+		},
+		{
+			Reviewer: "Reviewer5",
+			Text:     "An interesting mix of humor and tragedy, with moments of brilliance.",
+		},
+		{
+			Reviewer: "Reviewer6",
+			Text:     "The plot is intriguing, though some parts feel rushed.",
+		},
+		{
+			Reviewer: "Reviewer7",
+			Text:     "A fine piece of literature with deep thematic elements.",
+		},
+		{
+			Reviewer: "Reviewer8",
+			Text:     "One of the less popular works, but it deserves more recognition.",
+		},
+		{
+			Reviewer: "Reviewer9",
+			Text:     "The humor is well-placed, though it may not be for everyone.",
+		},
+		{
+			Reviewer: "Reviewer10",
+			Text:     "A beautifully written play that captures the essence of human emotions.",
+		},
 	}
 
 	// Verifica se as avaliações estão habilitadas e define os ratings
 	if ratingsEnabled {
-		if starsReviewer1 != -1 {
-			reviews[0].Rating = Rating{Stars: starsReviewer1, Color: starColor}
-		} else {
-			reviews[0].Rating = Rating{Stars: -1, Color: "Ratings service is unavailable"}
-		}
-
-		if starsReviewer2 != -1 {
-			reviews[1].Rating = Rating{Stars: starsReviewer2, Color: starColor}
-		} else {
-			reviews[1].Rating = Rating{Stars: -1, Color: "Ratings service is unavailable"}
+		for i := 0; i < 10; i++ {
+			if i%2 == 0 {
+				if starsReviewer1 != -1 {
+					reviews[i].Rating = Rating{Stars: starsReviewer1, Color: starColor}
+				} else {
+					reviews[i].Rating = Rating{Stars: -1, Color: "Ratings service is unavailable"}
+				}
+			} else {
+				if starsReviewer2 != -1 {
+					reviews[i].Rating = Rating{Stars: starsReviewer2, Color: starColor}
+				} else {
+					reviews[i].Rating = Rating{Stars: -1, Color: "Ratings service is unavailable"}
+				}
+			}
 		}
 	}
 
