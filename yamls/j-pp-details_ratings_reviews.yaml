@@ -10,7 +10,7 @@ groups:
   components:
   - github.com/ServiceWeaver/weaver/Main
   - github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details
-- name: -ratings
+- name: ratings
   components:
   - github.com/camilamedeir0s/bookinfo-serviceweaver/ratings/Ratings
 - name: reviews
