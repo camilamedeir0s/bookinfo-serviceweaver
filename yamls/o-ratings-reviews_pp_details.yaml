@@ -1,0 +1,18 @@
+appConfig: weaver.toml
+repo: docker.io/camilamedeir0s
+
+listeners:
+  - name: productpage
+    public: true
+
+groups:
+- name: ratings-reviews
+  components:
+  - github.com/camilamedeir0s/bookinfo-serviceweaver/ratings/Ratings
+  - github.com/camilamedeir0s/bookinfo-serviceweaver/reviews/Reviews
+- name: pp
+  components:
+  - github.com/ServiceWeaver/weaver/Main
+- name: details
+  components:
+  - github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details
