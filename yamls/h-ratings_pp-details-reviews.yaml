@@ -8,9 +8,9 @@ listeners:
 groups:
 - name: ratings
   components:
-  - github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details
+  - github.com/camilamedeir0s/bookinfo-serviceweaver/ratings/Ratings
 - name: pp-details-reviews
   components:
   - github.com/ServiceWeaver/weaver/Main
-  - github.com/camilamedeir0s/bookinfo-serviceweaver/ratings/Ratings
+  - github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details
   - github.com/camilamedeir0s/bookinfo-serviceweaver/reviews/Reviews
