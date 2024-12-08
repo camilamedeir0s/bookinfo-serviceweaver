@@ -9,7 +9,7 @@ groups:
 - name: productpage
   components:
   - github.com/ServiceWeaver/weaver/Main
-- name: details-ratings-reviews
+- name: det-ratings-reviews
   components:
   - github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details
   - github.com/camilamedeir0s/bookinfo-serviceweaver/ratings/Ratings

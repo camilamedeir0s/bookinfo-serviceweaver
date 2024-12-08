@@ -2,14 +2,14 @@
 # application:
 #
 #     app: bookinfo-serviceweaver
-#     version: a6676d0f
+#     version: 8c86bf3c
 #     components groups:
 #     - 
+#       - github.com/ServiceWeaver/weaver/Main
 #       - github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details
+#     - 
 #       - github.com/camilamedeir0s/bookinfo-serviceweaver/ratings/Ratings
 #       - github.com/camilamedeir0s/bookinfo-serviceweaver/reviews/Reviews
-#     - 
-#       - github.com/ServiceWeaver/weaver/Main
 #     listeners:
 #     - productpage
 #
@@ -22,19 +22,19 @@
 #
 # To deploy these resources, run:
 #
-#     kubectl apply -f /tmp/kube_a6676d0f.yaml
+#     kubectl apply -f /tmp/kube_8c86bf3c.yaml
 #
 # To view the deployed resources, run:
 #
-#     kubectl get all,configmaps --selector=serviceweaver/version=a6676d0f
+#     kubectl get all,configmaps --selector=serviceweaver/version=8c86bf3c
 #
 # To view a description of every resource, run:
 #
-#     kubectl get all,configmaps --selector=serviceweaver/version=a6676d0f -o custom-columns=KIND:.kind,NAME:.metadata.name,APP:.metadata.labels.serviceweaver/app,VERSION:.metadata.labels.serviceweaver/version,DESCRIPTION:.metadata.annotations.description
+#     kubectl get all,configmaps --selector=serviceweaver/version=8c86bf3c -o custom-columns=KIND:.kind,NAME:.metadata.name,APP:.metadata.labels.serviceweaver/app,VERSION:.metadata.labels.serviceweaver/version,DESCRIPTION:.metadata.annotations.description
 #
 # To delete the resources, run:
 #
-#     kubectl delete all,configmaps --selector=serviceweaver/version=a6676d0f
+#     kubectl delete all,configmaps --selector=serviceweaver/version=8c86bf3c
 
 
 # Roles.
@@ -79,26 +79,26 @@ apiVersion: v1
 data:
   config.textpb: |
     namespace:  "default"
-    deployment_id:  "a6676d0f-79e3-4820-b9df-d9c28231385c"
+    deployment_id:  "8c86bf3c-4be1-49b0-8cef-d23638d124c0"
     listeners:  {
       key:  "productpage"
       value:  20000
     }
     groups:  {
       key:  "github.com/ServiceWeaver/weaver/Main"
-      value:  "productpage"
+      value:  "productpage-details"
     }
     groups:  {
       key:  "github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details"
-      value:  "details-ratings-reviews"
+      value:  "productpage-details"
     }
     groups:  {
       key:  "github.com/camilamedeir0s/bookinfo-serviceweaver/ratings/Ratings"
-      value:  "details-ratings-reviews"
+      value:  "ratings-reviews"
     }
     groups:  {
       key:  "github.com/camilamedeir0s/bookinfo-serviceweaver/reviews/Reviews"
-      value:  "details-ratings-reviews"
+      value:  "ratings-reviews"
     }
     telemetry:  {
       metrics:  {
@@ -114,120 +114,17 @@ kind: ConfigMap
 metadata:
   annotations:
     description: This ConfigMap contains config files for app "bookinfo-serviceweaver"
-      version "a6676d0f".
+      version "8c86bf3c".
   creationTimestamp: null
   labels:
     serviceweaver/app: bookinfo-serviceweaver
-    serviceweaver/version: a6676d0f
-  name: config-a6676d0f
+    serviceweaver/version: 8c86bf3c
+  name: config-8c86bf3c
   namespace: default
 
 ---
 
-# Deployment for group details-ratings-reviews
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  annotations:
-    description: This Deployment hosts components github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details,
-      github.com/camilamedeir0s/bookinfo-serviceweaver/ratings/Ratings, github.com/camilamedeir0s/bookinfo-serviceweaver/reviews/Reviews.
-  creationTimestamp: null
-  labels:
-    serviceweaver/app: bookinfo-serviceweaver
-    serviceweaver/version: a6676d0f
-  name: bookinfo-serviceweaver-details-ratings-reviews-a6676d0f-92dccdbd
-  namespace: default
-spec:
-  selector:
-    matchLabels:
-      serviceweaver/name: bookinfo-serviceweaver-details-ratings-reviews-a6676d0f-92dccdbd
-  strategy: {}
-  template:
-    metadata:
-      annotations:
-        description: This Pod hosts components github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details,
-          github.com/camilamedeir0s/bookinfo-serviceweaver/ratings/Ratings, github.com/camilamedeir0s/bookinfo-serviceweaver/reviews/Reviews.
-      creationTimestamp: null
-      labels:
-        serviceweaver/app: bookinfo-serviceweaver
-        serviceweaver/name: bookinfo-serviceweaver-details-ratings-reviews-a6676d0f-92dccdbd
-        serviceweaver/version: a6676d0f
-      namespace: default
-    spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchLabels:
-                  serviceweaver/name: bookinfo-serviceweaver-details-ratings-reviews-a6676d0f-92dccdbd
-              topologyKey: kubernetes.io/hostname
-            weight: 100
-      containers:
-      - args:
-        - babysitter
-        - /weaver/weaver.toml
-        - /weaver/config.textpb
-        - github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details
-        - github.com/camilamedeir0s/bookinfo-serviceweaver/ratings/Ratings
-        - github.com/camilamedeir0s/bookinfo-serviceweaver/reviews/Reviews
-        image: docker.io/camilamedeir0s/bookinfo-serviceweaver:a6676d0f
-        imagePullPolicy: IfNotPresent
-        name: serviceweaver
-        resources: {}
-        stdin: true
-        tty: true
-        volumeMounts:
-        - mountPath: /weaver/weaver.toml
-          name: config
-          subPath: weaver.toml
-        - mountPath: /weaver/config.textpb
-          name: config
-          subPath: config.textpb
-      dnsPolicy: ClusterFirst
-      serviceAccountName: default
-      volumes:
-      - configMap:
-          name: config-a6676d0f
-        name: config
-status: {}
-
----
-
-# Autoscaler for group details-ratings-reviews
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  annotations:
-    description: This HorizontalPodAutoscaler scales the "bookinfo-serviceweaver-details-ratings-reviews-a6676d0f-92dccdbd"
-      Deployment.
-  creationTimestamp: null
-  labels:
-    serviceweaver/app: bookinfo-serviceweaver
-    serviceweaver/version: a6676d0f
-  name: bookinfo-serviceweaver-details-ratings-reviews-a6676d0f-92dccdbd
-  namespace: default
-spec:
-  maxReplicas: 10
-  metrics:
-  - resource:
-      name: cpu
-      target:
-        averageUtilization: 80
-        type: Utilization
-    type: Resource
-  minReplicas: 1
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: bookinfo-serviceweaver-details-ratings-reviews-a6676d0f-92dccdbd
-status:
-  currentMetrics: null
-  desiredReplicas: 0
-
----
-
-# Listener Service for group productpage
+# Listener Service for group productpage-details
 apiVersion: v1
 kind: Service
 metadata:
@@ -237,8 +134,8 @@ metadata:
   labels:
     serviceweaver/app: bookinfo-serviceweaver
     serviceweaver/listener: productpage
-    serviceweaver/version: a6676d0f
-  name: productpage-a6676d0f
+    serviceweaver/version: 8c86bf3c
+  name: productpage-8c86bf3c
   namespace: default
 spec:
   ports:
@@ -246,39 +143,41 @@ spec:
     protocol: TCP
     targetPort: 20000
   selector:
-    serviceweaver/name: bookinfo-serviceweaver-productpage-a6676d0f-75d16b8b
+    serviceweaver/name: bookinfo-serviceweaver-productpage-details-8c86bf3c-b79dd7e4
   type: LoadBalancer
 status:
   loadBalancer: {}
 
 ---
 
-# Deployment for group productpage
+# Deployment for group productpage-details
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    description: This Deployment hosts components github.com/ServiceWeaver/weaver/Main.
+    description: This Deployment hosts components github.com/ServiceWeaver/weaver/Main,
+      github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details.
   creationTimestamp: null
   labels:
     serviceweaver/app: bookinfo-serviceweaver
-    serviceweaver/version: a6676d0f
-  name: bookinfo-serviceweaver-productpage-a6676d0f-75d16b8b
+    serviceweaver/version: 8c86bf3c
+  name: bookinfo-serviceweaver-productpage-details-8c86bf3c-b79dd7e4
   namespace: default
 spec:
   selector:
     matchLabels:
-      serviceweaver/name: bookinfo-serviceweaver-productpage-a6676d0f-75d16b8b
+      serviceweaver/name: bookinfo-serviceweaver-productpage-details-8c86bf3c-b79dd7e4
   strategy: {}
   template:
     metadata:
       annotations:
-        description: This Pod hosts components github.com/ServiceWeaver/weaver/Main.
+        description: This Pod hosts components github.com/ServiceWeaver/weaver/Main,
+          github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details.
       creationTimestamp: null
       labels:
         serviceweaver/app: bookinfo-serviceweaver
-        serviceweaver/name: bookinfo-serviceweaver-productpage-a6676d0f-75d16b8b
-        serviceweaver/version: a6676d0f
+        serviceweaver/name: bookinfo-serviceweaver-productpage-details-8c86bf3c-b79dd7e4
+        serviceweaver/version: 8c86bf3c
       namespace: default
     spec:
       affinity:
@@ -287,7 +186,7 @@ spec:
           - podAffinityTerm:
               labelSelector:
                 matchLabels:
-                  serviceweaver/name: bookinfo-serviceweaver-productpage-a6676d0f-75d16b8b
+                  serviceweaver/name: bookinfo-serviceweaver-productpage-details-8c86bf3c-b79dd7e4
               topologyKey: kubernetes.io/hostname
             weight: 100
       containers:
@@ -296,7 +195,8 @@ spec:
         - /weaver/weaver.toml
         - /weaver/config.textpb
         - github.com/ServiceWeaver/weaver/Main
-        image: docker.io/camilamedeir0s/bookinfo-serviceweaver:a6676d0f
+        - github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details
+        image: docker.io/camilamedeir0s/bookinfo-serviceweaver:8c86bf3c
         imagePullPolicy: IfNotPresent
         name: serviceweaver
         ports:
@@ -316,24 +216,24 @@ spec:
       serviceAccountName: default
       volumes:
       - configMap:
-          name: config-a6676d0f
+          name: config-8c86bf3c
         name: config
 status: {}
 
 ---
 
-# Autoscaler for group productpage
+# Autoscaler for group productpage-details
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   annotations:
-    description: This HorizontalPodAutoscaler scales the "bookinfo-serviceweaver-productpage-a6676d0f-75d16b8b"
+    description: This HorizontalPodAutoscaler scales the "bookinfo-serviceweaver-productpage-details-8c86bf3c-b79dd7e4"
       Deployment.
   creationTimestamp: null
   labels:
     serviceweaver/app: bookinfo-serviceweaver
-    serviceweaver/version: a6676d0f
-  name: bookinfo-serviceweaver-productpage-a6676d0f-75d16b8b
+    serviceweaver/version: 8c86bf3c
+  name: bookinfo-serviceweaver-productpage-details-8c86bf3c-b79dd7e4
   namespace: default
 spec:
   maxReplicas: 10
@@ -348,7 +248,109 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: bookinfo-serviceweaver-productpage-a6676d0f-75d16b8b
+    name: bookinfo-serviceweaver-productpage-details-8c86bf3c-b79dd7e4
+status:
+  currentMetrics: null
+  desiredReplicas: 0
+
+---
+
+# Deployment for group ratings-reviews
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: This Deployment hosts components github.com/camilamedeir0s/bookinfo-serviceweaver/ratings/Ratings,
+      github.com/camilamedeir0s/bookinfo-serviceweaver/reviews/Reviews.
+  creationTimestamp: null
+  labels:
+    serviceweaver/app: bookinfo-serviceweaver
+    serviceweaver/version: 8c86bf3c
+  name: bookinfo-serviceweaver-ratings-reviews-8c86bf3c-6e919207
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      serviceweaver/name: bookinfo-serviceweaver-ratings-reviews-8c86bf3c-6e919207
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        description: This Pod hosts components github.com/camilamedeir0s/bookinfo-serviceweaver/ratings/Ratings,
+          github.com/camilamedeir0s/bookinfo-serviceweaver/reviews/Reviews.
+      creationTimestamp: null
+      labels:
+        serviceweaver/app: bookinfo-serviceweaver
+        serviceweaver/name: bookinfo-serviceweaver-ratings-reviews-8c86bf3c-6e919207
+        serviceweaver/version: 8c86bf3c
+      namespace: default
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  serviceweaver/name: bookinfo-serviceweaver-ratings-reviews-8c86bf3c-6e919207
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - args:
+        - babysitter
+        - /weaver/weaver.toml
+        - /weaver/config.textpb
+        - github.com/camilamedeir0s/bookinfo-serviceweaver/ratings/Ratings
+        - github.com/camilamedeir0s/bookinfo-serviceweaver/reviews/Reviews
+        image: docker.io/camilamedeir0s/bookinfo-serviceweaver:8c86bf3c
+        imagePullPolicy: IfNotPresent
+        name: serviceweaver
+        resources: {}
+        stdin: true
+        tty: true
+        volumeMounts:
+        - mountPath: /weaver/weaver.toml
+          name: config
+          subPath: weaver.toml
+        - mountPath: /weaver/config.textpb
+          name: config
+          subPath: config.textpb
+      dnsPolicy: ClusterFirst
+      serviceAccountName: default
+      volumes:
+      - configMap:
+          name: config-8c86bf3c
+        name: config
+status: {}
+
+---
+
+# Autoscaler for group ratings-reviews
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  annotations:
+    description: This HorizontalPodAutoscaler scales the "bookinfo-serviceweaver-ratings-reviews-8c86bf3c-6e919207"
+      Deployment.
+  creationTimestamp: null
+  labels:
+    serviceweaver/app: bookinfo-serviceweaver
+    serviceweaver/version: 8c86bf3c
+  name: bookinfo-serviceweaver-ratings-reviews-8c86bf3c-6e919207
+  namespace: default
+spec:
+  maxReplicas: 10
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 80
+        type: Utilization
+    type: Resource
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: bookinfo-serviceweaver-ratings-reviews-8c86bf3c-6e919207
 status:
   currentMetrics: null
   desiredReplicas: 0
