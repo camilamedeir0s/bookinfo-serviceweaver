@@ -193,36 +193,36 @@ status: {}
 
 ---
 
-# Autoscaler for group details-reviews
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  annotations:
-    description: This HorizontalPodAutoscaler scales the "bookinfo-serviceweaver-details-reviews-cd5bf974-17ed0380"
-      Deployment.
-  creationTimestamp: null
-  labels:
-    serviceweaver/app: bookinfo-serviceweaver
-    serviceweaver/version: cd5bf974
-  name: bookinfo-serviceweaver-details-reviews-cd5bf974-17ed0380
-  namespace: default
-spec:
-  maxReplicas: 10
-  metrics:
-  - resource:
-      name: cpu
-      target:
-        averageUtilization: 80
-        type: Utilization
-    type: Resource
-  minReplicas: 1
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: bookinfo-serviceweaver-details-reviews-cd5bf974-17ed0380
-status:
-  currentMetrics: null
-  desiredReplicas: 0
+# # Autoscaler for group details-reviews
+# apiVersion: autoscaling/v2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   annotations:
+#     description: This HorizontalPodAutoscaler scales the "bookinfo-serviceweaver-details-reviews-cd5bf974-17ed0380"
+#       Deployment.
+#   creationTimestamp: null
+#   labels:
+#     serviceweaver/app: bookinfo-serviceweaver
+#     serviceweaver/version: cd5bf974
+#   name: bookinfo-serviceweaver-details-reviews-cd5bf974-17ed0380
+#   namespace: default
+# spec:
+#   maxReplicas: 10
+#   metrics:
+#   - resource:
+#       name: cpu
+#       target:
+#         averageUtilization: 80
+#         type: Utilization
+#     type: Resource
+#   minReplicas: 1
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: bookinfo-serviceweaver-details-reviews-cd5bf974-17ed0380
+# status:
+#   currentMetrics: null
+#   desiredReplicas: 0
 
 ---
 
@@ -324,35 +324,35 @@ status: {}
 
 ---
 
-# Autoscaler for group productpage-ratings
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  annotations:
-    description: This HorizontalPodAutoscaler scales the "bookinfo-serviceweaver-productpage-ratings-cd5bf974-3faf32c0"
-      Deployment.
-  creationTimestamp: null
-  labels:
-    serviceweaver/app: bookinfo-serviceweaver
-    serviceweaver/version: cd5bf974
-  name: bookinfo-serviceweaver-productpage-ratings-cd5bf974-3faf32c0
-  namespace: default
-spec:
-  maxReplicas: 10
-  metrics:
-  - resource:
-      name: cpu
-      target:
-        averageUtilization: 80
-        type: Utilization
-    type: Resource
-  minReplicas: 1
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: bookinfo-serviceweaver-productpage-ratings-cd5bf974-3faf32c0
-status:
-  currentMetrics: null
-  desiredReplicas: 0
+# # Autoscaler for group productpage-ratings
+# apiVersion: autoscaling/v2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   annotations:
+#     description: This HorizontalPodAutoscaler scales the "bookinfo-serviceweaver-productpage-ratings-cd5bf974-3faf32c0"
+#       Deployment.
+#   creationTimestamp: null
+#   labels:
+#     serviceweaver/app: bookinfo-serviceweaver
+#     serviceweaver/version: cd5bf974
+#   name: bookinfo-serviceweaver-productpage-ratings-cd5bf974-3faf32c0
+#   namespace: default
+# spec:
+#   maxReplicas: 10
+#   metrics:
+#   - resource:
+#       name: cpu
+#       target:
+#         averageUtilization: 80
+#         type: Utilization
+#     type: Resource
+#   minReplicas: 1
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: bookinfo-serviceweaver-productpage-ratings-cd5bf974-3faf32c0
+# status:
+#   currentMetrics: null
+#   desiredReplicas: 0
 
 ---

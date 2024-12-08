@@ -223,38 +223,38 @@ status: {}
 
 ---
 
-# Autoscaler for group pp-details-reviews
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  annotations:
-    description: This HorizontalPodAutoscaler scales the "bookinfo-serviceweaver-pp-details-reviews-9340fadc-05a2e6c3"
-      Deployment.
-  creationTimestamp: null
-  labels:
-    serviceweaver/app: bookinfo-serviceweaver
-    serviceweaver/version: 9340fadc
-  name: bookinfo-serviceweaver-pp-details-reviews-9340fadc-05a2e6c3
-  namespace: default
-spec:
-  maxReplicas: 10
-  metrics:
-  - resource:
-      name: cpu
-      target:
-        averageUtilization: 80
-        type: Utilization
-    type: Resource
-  minReplicas: 1
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: bookinfo-serviceweaver-pp-details-reviews-9340fadc-05a2e6c3
-status:
-  currentMetrics: null
-  desiredReplicas: 0
+# # Autoscaler for group pp-details-reviews
+# apiVersion: autoscaling/v2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   annotations:
+#     description: This HorizontalPodAutoscaler scales the "bookinfo-serviceweaver-pp-details-reviews-9340fadc-05a2e6c3"
+#       Deployment.
+#   creationTimestamp: null
+#   labels:
+#     serviceweaver/app: bookinfo-serviceweaver
+#     serviceweaver/version: 9340fadc
+#   name: bookinfo-serviceweaver-pp-details-reviews-9340fadc-05a2e6c3
+#   namespace: default
+# spec:
+#   maxReplicas: 10
+#   metrics:
+#   - resource:
+#       name: cpu
+#       target:
+#         averageUtilization: 80
+#         type: Utilization
+#     type: Resource
+#   minReplicas: 1
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: bookinfo-serviceweaver-pp-details-reviews-9340fadc-05a2e6c3
+# status:
+#   currentMetrics: null
+#   desiredReplicas: 0
 
----
+# ---
 
 # Deployment for group ratings
 apiVersion: apps/v1
@@ -322,35 +322,35 @@ status: {}
 
 ---
 
-# Autoscaler for group ratings
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  annotations:
-    description: This HorizontalPodAutoscaler scales the "bookinfo-serviceweaver-ratings-9340fadc-fb9eecb8"
-      Deployment.
-  creationTimestamp: null
-  labels:
-    serviceweaver/app: bookinfo-serviceweaver
-    serviceweaver/version: 9340fadc
-  name: bookinfo-serviceweaver-ratings-9340fadc-fb9eecb8
-  namespace: default
-spec:
-  maxReplicas: 10
-  metrics:
-  - resource:
-      name: cpu
-      target:
-        averageUtilization: 80
-        type: Utilization
-    type: Resource
-  minReplicas: 1
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: bookinfo-serviceweaver-ratings-9340fadc-fb9eecb8
-status:
-  currentMetrics: null
-  desiredReplicas: 0
+# # Autoscaler for group ratings
+# apiVersion: autoscaling/v2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   annotations:
+#     description: This HorizontalPodAutoscaler scales the "bookinfo-serviceweaver-ratings-9340fadc-fb9eecb8"
+#       Deployment.
+#   creationTimestamp: null
+#   labels:
+#     serviceweaver/app: bookinfo-serviceweaver
+#     serviceweaver/version: 9340fadc
+#   name: bookinfo-serviceweaver-ratings-9340fadc-fb9eecb8
+#   namespace: default
+# spec:
+#   maxReplicas: 10
+#   metrics:
+#   - resource:
+#       name: cpu
+#       target:
+#         averageUtilization: 80
+#         type: Utilization
+#     type: Resource
+#   minReplicas: 1
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: bookinfo-serviceweaver-ratings-9340fadc-fb9eecb8
+# status:
+#   currentMetrics: null
+#   desiredReplicas: 0
 
----
+# ---
