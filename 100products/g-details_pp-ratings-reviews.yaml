@@ -152,15 +152,17 @@ spec:
         serviceweaver/version: 32df1053
       namespace: default
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchLabels:
-                  serviceweaver/name: bookinfo-serviceweaver-details-32df1053-be18f27d
-              topologyKey: kubernetes.io/hostname
-            weight: 100
+      # affinity:
+      #   podAntiAffinity:
+      #     preferredDuringSchedulingIgnoredDuringExecution:
+      #     - podAffinityTerm:
+      #         labelSelector:
+      #           matchLabels:
+      #             serviceweaver/name: bookinfo-serviceweaver-details-32df1053-be18f27d
+      #         topologyKey: kubernetes.io/hostname
+      #       weight: 100
+      nodeSelector:
+        name: node01
       containers:
       - args:
         - babysitter
@@ -279,15 +281,17 @@ spec:
         serviceweaver/version: 32df1053
       namespace: default
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchLabels:
-                  serviceweaver/name: bookinfo-serviceweaver-pp-ratings-reviews-32df1053-b84da383
-              topologyKey: kubernetes.io/hostname
-            weight: 100
+      # affinity:
+      #   podAntiAffinity:
+      #     preferredDuringSchedulingIgnoredDuringExecution:
+      #     - podAffinityTerm:
+      #         labelSelector:
+      #           matchLabels:
+      #             serviceweaver/name: bookinfo-serviceweaver-pp-ratings-reviews-32df1053-b84da383
+      #         topologyKey: kubernetes.io/hostname
+      #       weight: 100
+      nodeSelector:
+        name: node01
       containers:
       - args:
         - babysitter
