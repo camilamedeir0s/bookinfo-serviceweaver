@@ -181,15 +181,17 @@ spec:
         serviceweaver/version: 44410c1e
       namespace: default
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchLabels:
-                  serviceweaver/name: bookinfo-serviceweaver-colocated-44410c1e-922f1df9
-              topologyKey: kubernetes.io/hostname
-            weight: 100
+      #affinity:
+      #  podAntiAffinity:
+      #    preferredDuringSchedulingIgnoredDuringExecution:
+      #    - podAffinityTerm:
+      #        labelSelector:
+      #          matchLabels:
+      #            serviceweaver/name: bookinfo-serviceweaver-colocated-44410c1e-922f1df9
+      #        topologyKey: kubernetes.io/hostname
+      #      weight: 100
+      nodeSelector:
+        name: node1
       containers:
       - args:
         - babysitter
