@@ -191,7 +191,7 @@ spec:
       #        topologyKey: kubernetes.io/hostname
       #      weight: 100
       nodeSelector:
-        name: node1
+        name: node01
       containers:
       - args:
         - babysitter
