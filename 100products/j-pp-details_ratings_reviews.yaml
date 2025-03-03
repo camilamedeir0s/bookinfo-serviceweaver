@@ -181,15 +181,17 @@ spec:
         serviceweaver/version: f8c165d0
       namespace: default
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchLabels:
-                  serviceweaver/name: bookinfo-serviceweaver-pp-details-f8c165d0-8d404fdf
-              topologyKey: kubernetes.io/hostname
-            weight: 100
+      # affinity:
+      #   podAntiAffinity:
+      #     preferredDuringSchedulingIgnoredDuringExecution:
+      #     - podAffinityTerm:
+      #         labelSelector:
+      #           matchLabels:
+      #             serviceweaver/name: bookinfo-serviceweaver-pp-details-f8c165d0-8d404fdf
+      #         topologyKey: kubernetes.io/hostname
+      #       weight: 100
+      nodeSelector:
+        name: node01
       containers:
       - args:
         - babysitter
@@ -284,15 +286,17 @@ spec:
         serviceweaver/version: f8c165d0
       namespace: default
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchLabels:
-                  serviceweaver/name: bookinfo-serviceweaver-ratings-f8c165d0-8835c5b7
-              topologyKey: kubernetes.io/hostname
-            weight: 100
+      # affinity:
+      #   podAntiAffinity:
+      #     preferredDuringSchedulingIgnoredDuringExecution:
+      #     - podAffinityTerm:
+      #         labelSelector:
+      #           matchLabels:
+      #             serviceweaver/name: bookinfo-serviceweaver-ratings-f8c165d0-8835c5b7
+      #         topologyKey: kubernetes.io/hostname
+      #       weight: 100
+      nodeSelector:
+        name: node01
       containers:
       - args:
         - babysitter
@@ -383,15 +387,17 @@ spec:
         serviceweaver/version: f8c165d0
       namespace: default
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchLabels:
-                  serviceweaver/name: bookinfo-serviceweaver-reviews-f8c165d0-447310a8
-              topologyKey: kubernetes.io/hostname
-            weight: 100
+      # affinity:
+      #   podAntiAffinity:
+      #     preferredDuringSchedulingIgnoredDuringExecution:
+      #     - podAffinityTerm:
+      #         labelSelector:
+      #           matchLabels:
+      #             serviceweaver/name: bookinfo-serviceweaver-reviews-f8c165d0-447310a8
+      #         topologyKey: kubernetes.io/hostname
+      #       weight: 100
+      nodeSelector:
+        name: node01
       containers:
       - args:
         - babysitter
