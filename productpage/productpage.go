@@ -60,18 +60,22 @@ func Serve(ctx context.Context, s *Server) error {
 
 	// Set up routing
 	r := http.NewServeMux()
-	r.Handle("/", http.HandlerFunc(s.indexHandler))
-	r.HandleFunc("/health", s.healthHandler)
-	r.HandleFunc("/productpage", s.productPageHandler)
-	r.HandleFunc("/api/v1/products", s.productsHandler)
-	r.HandleFunc("/api/v1/products/{id}", s.productHandler)
-	r.HandleFunc("/api/v1/products/{id}/reviews", s.productReviewsHandler)
-	r.HandleFunc("/api/v1/products/{id}/ratings", s.productRatingsHandler)
+
+	r.Handle("/", weaver.InstrumentHandler("index", http.HandlerFunc(s.indexHandler)))
+	r.Handle("/health", weaver.InstrumentHandler("health", http.HandlerFunc(s.healthHandler)))
+	r.Handle("/productpage", weaver.InstrumentHandler("productpage-reviews-details", http.HandlerFunc(s.productPageHandler)))
+	r.Handle("/api/v1/products", weaver.InstrumentHandler("products", http.HandlerFunc(s.productsHandler)))
+	r.Handle("/api/v1/products/{id}", weaver.InstrumentHandler("product", http.HandlerFunc(s.productHandler)))
+	r.Handle("/api/v1/products/{id}/reviews", weaver.InstrumentHandler("product-reviews", http.HandlerFunc(s.productReviewsHandler)))
+	r.Handle("/api/v1/products/{id}/ratings", weaver.InstrumentHandler("product-ratings", http.HandlerFunc(s.productRatingsHandler)))
+
+	// Static content não precisa de tracing, pode manter normal:
 	r.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(staticHTML))))
 
 	// Set handler and log initialization.
 	s.handler = r
 	s.Logger(ctx).Debug("ProductPage service is up", "address", s.productpage)
+
 
 	// Serve requests on the Service Weaver listener.
 	return http.Serve(s.productpage, s.handler)
@@ -106,9 +110,10 @@ func (s *Server) indexHandler(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) productPageHandler(w http.ResponseWriter, r *http.Request) {
 	productID := 1 // ID de produto padrão
+	ctx := r.Context()
 
 	// Obtendo os detalhes do livro
-	bookDetails, err := s.details.Get().GetBookDetails(context.Background(), productID, nil)
+	bookDetails, err := s.details.Get().GetBookDetails(ctx, productID, nil)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to get book details: %v", err), http.StatusInternalServerError)
 		return
@@ -117,7 +122,7 @@ func (s *Server) productPageHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(bookDetails)
 
 	// Obtendo as avaliações do livro
-	reviewsResponse, err := s.reviews.Get().BookReviewsByID(context.Background(), fmt.Sprintf("%d", productID))
+	reviewsResponse, err := s.reviews.Get().BookReviewsByID(ctx, fmt.Sprintf("%d", productID))
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to get book reviews: %v", err), http.StatusInternalServerError)
 		return

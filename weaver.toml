@@ -7,3 +7,7 @@ listeners.productpage = {address = "localhost:12345"}
 
 [multi]
 listeners.productpage = {address = "localhost:12345"}
+
+[kube]
+namespace = "default"
+listeners.productpage = { public = true }
