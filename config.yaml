@@ -6,11 +6,9 @@ listeners:
     public: true
 
 groups:
-- name: productpage-details
+- name: colocated
   components:
   - github.com/ServiceWeaver/weaver/Main
   - github.com/camilamedeir0s/bookinfo-serviceweaver/details/Details
-- name: ratings-reviews
-  components:
   - github.com/camilamedeir0s/bookinfo-serviceweaver/ratings/Ratings
   - github.com/camilamedeir0s/bookinfo-serviceweaver/reviews/Reviews
